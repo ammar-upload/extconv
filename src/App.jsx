@@ -129,7 +129,7 @@ const showCompleted =  (e) => {
       {todos.map((item, index) => (
     ((show || !item.done) && <div key={index} className="p-5 rounded-2xl border bg-white/80 dark:bg-zinc-900/80 shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:scale-[1.01] transition-transform">
  <div className="w-[300px]">
-   <p className={   `${item.done?"line-through":''}   text-sm text-gray-800`}>{item.text}</p>
+   <p className={   `${item.done?"line-through":''}   text-sm text-gray-800 dark:text-gray-300`}>{item.text}</p>
  </div>
  <div className="flex gap-2 flex-wrap">
    <button className="px-4 py-1.5 rounded-full bg-gradient-to-r from-green-500 to-emerald-600 text-white text-sm shadow"   onClick={()=>handleDone(index)}>Done</button>
