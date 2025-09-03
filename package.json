@@ -1,5 +1,5 @@
 {
-  "name": "video-108",
+  "name": "vite-project",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,6 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "file-saver": "^2.0.5",
+    "jszip": "^3.10.1",
+    "lucide-react": "^0.542.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
