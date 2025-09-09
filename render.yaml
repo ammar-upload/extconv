@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: inpage-backend
+    env: python
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port 10000
+    envVars:
+      - key: PORT
+        value: 10000
+    plan: free
+    rootDir: backend
+
+  - type: web
+    name: inpage-frontend
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npx serve -s dist -l 3000
+    envVars:
+      - key: VITE_API_URL
+        value: https://inpage-backend.onrender.com
+    plan: free
+    rootDir: frontend
