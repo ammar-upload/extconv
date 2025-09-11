@@ -1,0 +1,13 @@
+# Node / Frontend
+node_modules/
+frontend/dist/
+
+# Python / Backend
+__pycache__/
+.venv/
+uploads/
+outputs/
+
+# OS / IDE files
+.DS_Store
+*.log
