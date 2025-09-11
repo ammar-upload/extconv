@@ -2,21 +2,18 @@ services:
   - type: web
     name: inpage-backend
     env: python
-    buildCommand: pip install -r backend/requirements.txt
-    startCommand: uvicorn main:app --host 0.0.0.0 --port 10000
-    envVars:
-      - key: PORT
-        value: 10000
-    plan: free
     rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    plan: free
 
   - type: web
-    name: inpage-frontend
+    name: extconv  # 👈 matches your chosen frontend URL extconv.onrender.com
     env: node
+    rootDir: frontend
     buildCommand: npm install && npm run build
-    startCommand: npx serve -s dist -l 3000
+    startCommand: npx serve -s dist -l $PORT
     envVars:
       - key: VITE_API_URL
-        value: https://inpage-backend.onrender.com
+        value: https://inpage-backend.onrender.com  # 👈 backend URL
     plan: free
-    rootDir: frontend
