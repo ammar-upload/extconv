@@ -7,8 +7,11 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependency directories
 node_modules
-dist
+
+# Build outputs (keep dist in Git for Render)
+# dist
 dist-ssr
 *.local
 
