@@ -10,6 +10,9 @@ export default function App() {
   const [error, setError] = useState("");
   const [serverStatus, setServerStatus] = useState("checking");
 
+  // ✅ API base URL (Render backend or local)
+  const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+
   // ✅ Check server on mount
   useEffect(() => {
     checkServerStatus();
@@ -17,7 +20,7 @@ export default function App() {
 
   const checkServerStatus = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:8000/");
+      const response = await fetch(`${API_URL}/`);
       if (response.ok) {
         setServerStatus("online");
         setError("");
@@ -31,11 +34,11 @@ export default function App() {
   const addFiles = (list) => {
     const incoming = Array.from(list || []);
     const validFiles = incoming.filter((f) =>
-      [".inp", ".inpage"].some((ext) => f.name.toLowerCase().endsWith(ext))
+      [".inp", ".inpage", ".txt"].some((ext) => f.name.toLowerCase().endsWith(ext))
     );
 
     if (!validFiles.length) {
-      setError("❌ Only .INP and .INPAGE files are supported.");
+      setError("❌ Only .INP, .INPAGE and .TXT files are supported.");
       setTimeout(() => setError(""), 3000);
       return;
     }
@@ -53,7 +56,7 @@ export default function App() {
       formData.append("file", file);
 
       try {
-        const res = await fetch("http://127.0.0.1:8000/convert", {
+        const res = await fetch(`${API_URL}/convert`, {
           method: "POST",
           body: formData,
         });
@@ -64,7 +67,7 @@ export default function App() {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = file.name.replace(/\.(inp|inpage)$/i, "") + "_converted.docx";
+        a.download = file.name.replace(/\.(inp|inpage|txt)$/i, "") + "_converted.docx";
         a.click();
         window.URL.revokeObjectURL(url);
       } catch (err) {
@@ -162,11 +165,11 @@ export default function App() {
           onDragLeave={() => setDragging(false)}
         >
           <Upload className={`w-12 h-12 mx-auto mb-3 ${dark ? "text-indigo-400" : "text-blue-600"}`} />
-          <p className="font-semibold">Step 1: Upload .INP / .INPAGE files</p>
+          <p className="font-semibold">Step 1: Upload .INP / .INPAGE / .TXT files</p>
           <p className="text-sm opacity-70">
             {serverStatus === "offline" ? "Start backend server first" : "Drag & drop or click to browse"}
           </p>
-          <input ref={fileInputRef} type="file" accept=".inp,.inpage" multiple className="hidden" onChange={(e) => addFiles(e.target.files)} />
+          <input ref={fileInputRef} type="file" accept=".inp,.inpage,.txt" multiple className="hidden" onChange={(e) => addFiles(e.target.files)} />
         </div>
 
         {/* File list */}
@@ -195,22 +198,21 @@ export default function App() {
 
       {/* 🔹 Footer */}
       {files.length > 0 && serverStatus === "online" && (
-       <footer className="sticky bottom-0 w-full p-4 bg-gradient-to-r from-green-500 to-blue-500">
-  <button
-    onClick={convert}
-    disabled={loading}
-    className={`w-full max-w-md mx-auto flex justify-center items-center gap-2 py-3 px-6 font-semibold rounded-xl text-white shadow-lg transition-all duration-300 transform
-      ${
-        loading
-          ? "bg-gray-500 cursor-not-allowed"
-          : "bg-gradient-to-r from-green-500 to-blue-500 hover:from-blue-500 hover:to-purple-600 hover:shadow-xl hover:scale-105"
-      }`}
-  >
-    <Download className="w-5 h-5" />
-    {loading ? "Converting..." : `Convert & Download (${files.length})`}
-  </button>
-</footer>
-
+        <footer className="sticky bottom-0 w-full p-4 bg-gradient-to-r from-green-500 to-blue-500">
+          <button
+            onClick={convert}
+            disabled={loading}
+            className={`w-full max-w-md mx-auto flex justify-center items-center gap-2 py-3 px-6 font-semibold rounded-xl text-white shadow-lg transition-all duration-300 transform
+              ${
+                loading
+                  ? "bg-gray-500 cursor-not-allowed"
+                  : "bg-gradient-to-r from-green-500 to-blue-500 hover:from-blue-500 hover:to-purple-600 hover:shadow-xl hover:scale-105"
+              }`}
+          >
+            <Download className="w-5 h-5" />
+            {loading ? "Converting..." : `Convert & Download (${files.length})`}
+          </button>
+        </footer>
       )}
     </div>
   );
