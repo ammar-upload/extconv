@@ -95,9 +95,8 @@ async def convert_file(file: UploadFile = File(...)):
         if not safe_text.strip():
             safe_text = "⚠️ No readable content found. Please export your InPage file as Unicode Text (.txt)."
 
-        # Create Word doc
+        # Create Word doc (without heading)
         doc = Document()
-        doc.add_heading("Converted InPage Document", 0)
         for line in safe_text.splitlines():
             if line.strip():
                 doc.add_paragraph(line.strip())
